@@ -12,6 +12,10 @@
 		DE78B56C1D93E0A300C0AB9A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE78B56A1D93E0A300C0AB9A /* Main.storyboard */; };
 		DE78B56E1D93E0A300C0AB9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE78B56D1D93E0A300C0AB9A /* Assets.xcassets */; };
 		DE78B5711D93E0A300C0AB9A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE78B56F1D93E0A300C0AB9A /* LaunchScreen.storyboard */; };
+		DE78B5801D93E2B400C0AB9A /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE78B57C1D93E2B400C0AB9A /* NotoSans-Bold.ttf */; };
+		DE78B5811D93E2B400C0AB9A /* NotoSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE78B57D1D93E2B400C0AB9A /* NotoSans-BoldItalic.ttf */; };
+		DE78B5821D93E2B400C0AB9A /* NotoSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE78B57E1D93E2B400C0AB9A /* NotoSans-Italic.ttf */; };
+		DE78B5831D93E2B400C0AB9A /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE78B57F1D93E2B400C0AB9A /* NotoSans-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +26,10 @@
 		DE78B56D1D93E0A300C0AB9A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE78B5701D93E0A300C0AB9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE78B5721D93E0A300C0AB9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DE78B57C1D93E2B400C0AB9A /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Bold.ttf"; sourceTree = "<group>"; };
+		DE78B57D1D93E2B400C0AB9A /* NotoSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-BoldItalic.ttf"; sourceTree = "<group>"; };
+		DE78B57E1D93E2B400C0AB9A /* NotoSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Italic.ttf"; sourceTree = "<group>"; };
+		DE78B57F1D93E2B400C0AB9A /* NotoSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,14 +62,50 @@
 		DE78B5651D93E0A200C0AB9A /* s11-showcase-app */ = {
 			isa = PBXGroup;
 			children = (
+				DE78B57B1D93E13300C0AB9A /* Resources */,
+				DE78B57A1D93E12200C0AB9A /* Model */,
+				DE78B5791D93E10900C0AB9A /* View */,
+				DE78B5781D93E0FE00C0AB9A /* Controller */,
 				DE78B5661D93E0A200C0AB9A /* AppDelegate.swift */,
 				DE78B5681D93E0A300C0AB9A /* ViewController.swift */,
-				DE78B56A1D93E0A300C0AB9A /* Main.storyboard */,
 				DE78B56D1D93E0A300C0AB9A /* Assets.xcassets */,
-				DE78B56F1D93E0A300C0AB9A /* LaunchScreen.storyboard */,
 				DE78B5721D93E0A300C0AB9A /* Info.plist */,
 			);
 			path = "s11-showcase-app";
+			sourceTree = "<group>";
+		};
+		DE78B5781D93E0FE00C0AB9A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		DE78B5791D93E10900C0AB9A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DE78B56A1D93E0A300C0AB9A /* Main.storyboard */,
+				DE78B56F1D93E0A300C0AB9A /* LaunchScreen.storyboard */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		DE78B57A1D93E12200C0AB9A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		DE78B57B1D93E13300C0AB9A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DE78B57C1D93E2B400C0AB9A /* NotoSans-Bold.ttf */,
+				DE78B57D1D93E2B400C0AB9A /* NotoSans-BoldItalic.ttf */,
+				DE78B57E1D93E2B400C0AB9A /* NotoSans-Italic.ttf */,
+				DE78B57F1D93E2B400C0AB9A /* NotoSans-Regular.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,9 +166,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE78B5801D93E2B400C0AB9A /* NotoSans-Bold.ttf in Resources */,
 				DE78B5711D93E0A300C0AB9A /* LaunchScreen.storyboard in Resources */,
+				DE78B5811D93E2B400C0AB9A /* NotoSans-BoldItalic.ttf in Resources */,
+				DE78B5821D93E2B400C0AB9A /* NotoSans-Italic.ttf in Resources */,
 				DE78B56E1D93E0A300C0AB9A /* Assets.xcassets in Resources */,
 				DE78B56C1D93E0A300C0AB9A /* Main.storyboard in Resources */,
+				DE78B5831D93E2B400C0AB9A /* NotoSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
