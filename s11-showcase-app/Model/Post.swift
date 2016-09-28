@@ -14,7 +14,7 @@ class Post {
     private var _likes: Int!
     private var _username: String!
     private var _postKey: String!
-    private var _userLikedIt:Bool = false
+    private var _userLikedIt:Bool?
     
     var postDescription:String {
         return _postDescription
@@ -32,13 +32,27 @@ class Post {
         return _postKey
     }
     
-    var userLikedIt:Bool {
+    var userLikedIt:Bool? {
         get {
             return _userLikedIt
         }
         set {
             _userLikedIt = newValue
         }
+    }
+    
+    func update(data:Dictionary<String, AnyObject>) {
+        
+        if let likes = data["likes"] as? Int {
+            self._likes = likes
+        }
+        if let imgUrl = data["imageUrl"] as? String {
+            self._imageUrl = imgUrl
+        }
+        if let desc = data["description"] as? String {
+            self._postDescription = desc
+        }
+        
     }
     
     init(description:String, imageUrl:String?, username:String) {
@@ -49,14 +63,6 @@ class Post {
     }
     init(key:String, data:Dictionary<String, AnyObject>) {
         self._postKey = key
-        if let likes = data["likes"] as? Int {
-            self._likes = likes
-        }
-        if let imgUrl = data["imageUrl"] as? String {
-            self._imageUrl = imgUrl
-        }
-        if let desc = data["description"] as? String {
-            self._postDescription = desc
-        }
+        update(data)
     }
 }

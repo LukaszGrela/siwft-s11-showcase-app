@@ -26,8 +26,6 @@ class PostCell: UITableViewCell {
     
     private var _postRef:FIRDatabaseReference?
     
-    var likeChangeEventId:UInt?
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -49,24 +47,24 @@ class PostCell: UITableViewCell {
         
         DataService.instance.togglePostLike(self.post.postKey)
         
-        self.post.userLikedIt = !self.post.userLikedIt;
+        if let l = self.post.userLikedIt where l == true {
+            //true
+            self.post.userLikedIt = false;
+        } else {
+            //false or undefined
+            self.post.userLikedIt = true;
+        }
         self.updateLikeIt(self.post.userLikedIt)
     }
-    func updateLikeIt(like:Bool){
-        if like {
+    func updateLikeIt(like:Bool?){
+        if let l = like where l == true {
             self.likeItImage.image = UIImage(named:"heart-full")
         } else {
             self.likeItImage.image = UIImage(named:"heart-empty")
         }
     }
     func configure(data:Post, image:UIImage?) {
-        print("configure(data:\(data.imageUrl), image:\(image))")
-        
-        //get rid of previous observer (if not consumed)
-        if let postRef = _postRef, id = likeChangeEventId {
-            postRef.removeObserverWithHandle(id)
-        }
-        
+        //print("configure(data:\(data.imageUrl), image:\(image))")
         
         _postRef = nil;
         post = data;
@@ -77,20 +75,25 @@ class PostCell: UITableViewCell {
         if let user = DataService.instance.currentUserData {
             _postRef = user.child(DataService.DB_LIKES)
         }
-        /*
+        
         if let postRef = _postRef {
-            postRef.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
-                print("value: \(snapshot.value)")
-                if let likes = snapshot.value as? Dictionary<String, Bool>, _ = likes[self.post.postKey] {
-                    print("likes: \(likes)")
-                    self.post.userLikedIt = true;
-                } else {
-                    self.post.userLikedIt = false;
-                }
-                self.updateLikeIt(self.post.userLikedIt)
-            })
+            if let _ = self.post.userLikedIt {
+                //user already stored the value - we are handling it locally now
+            } else {
+                //get update from database once
+                postRef.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
+                    print("value: \(snapshot.value)")
+                    if let likes = snapshot.value as? Dictionary<String, Bool>, _ = likes[self.post.postKey] {
+                        print("likes: \(likes)")
+                        self.post.userLikedIt = true;
+                    } else {
+                        self.post.userLikedIt = false;
+                    }
+                    self.updateLikeIt(self.post.userLikedIt)
+                })
+            }
         }
-        */
+        //
         likesLabel.text = "\(data.likes)"
         descriptionText.text = data.postDescription
         
@@ -115,13 +118,6 @@ class PostCell: UITableViewCell {
         } else {
             self.showcaseImage.hidden = true
         }
-    }
-    
-    
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
 }

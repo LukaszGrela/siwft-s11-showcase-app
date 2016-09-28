@@ -57,39 +57,53 @@ class DataService {
             
             print("togglePostLike(\(postId))\n\(user)\n\(liked)")
             liked.runTransactionBlock({ (currentData:FIRMutableData) -> FIRTransactionResult in
+                print("transactionBlock:\(currentData.value)")
                 if var likes = currentData.value as? Dictionary<String, Bool> {
                     
-                    let countRef = self.postsHandle.child(postId).child(DataService.DB_LIKES)
+                    
                     if let _ = likes[postId] {
                         //unlike
                         likes.removeValueForKey(postId)
-                        countRef.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
-                            //unlike                            
-                            if var count = snapshot.value as? Int where count > 0 {
-                            count -= 1
-                            //update
-                            countRef.setValue(count)
-                        }
-                        })
+                        
                     } else {
                         //like
                         likes[postId] = true
-                        countRef.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
-                            //like
-                            if var count = snapshot.value as? Int {
-                                count += 1
-                                //update
-                                countRef.setValue(count)
-                            }
-                        })
-                    }
+                                            }
+                    currentData.value = likes
+                } else {
+                    //NULL
+                    let likes:Dictionary<String, Bool> = [postId:true]
+                    
                     currentData.value = likes
                 }
                 return FIRTransactionResult.successWithValue(currentData)
                 }, andCompletionBlock: { (error:NSError?, committed:Bool, snapshot:FIRDataSnapshot?) in
                     //
+                    print("transactionCompletion:\(committed), \(snapshot!.value)")
                     if let error = error {
                         print(error.debugDescription)
+                    } else {
+                        if committed {
+                            let value = snapshot!.value
+                            let dict = snapshot!.value as? Dictionary<String, Bool>
+                            let countRef = self.postsHandle.child(postId).child(DataService.DB_LIKES)
+                            countRef.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
+                                //like
+                                if var count = snapshot.value as? Int {
+                                    print("likes count: \(count)")
+                                    if !self.isNotNull(value) || (self.isNotNull(dict) && dict![postId] == nil) {
+                                        //removed
+                                        count -= 1
+                                    } else {
+                                        //added
+                                        count += 1
+                                    }
+                                    //update
+                                    print("updated count: \(count)")
+                                    countRef.setValue(count)
+                                }
+                            })
+                        }
                     }
             })
         }
@@ -99,5 +113,25 @@ class DataService {
         print("createUser \(uid), \(user)")
         
         usersHandle.child(uid).setValue(user)
+    }
+    
+    
+    
+    func isNotNull(object:AnyObject?) -> Bool {
+        guard let object = object else {
+            return false
+        }
+        return (isNotNSNull(object) && isNotStringNull(object))
+    }
+    
+    func isNotNSNull(object:AnyObject) -> Bool {
+        return object.classForCoder != NSNull.classForCoder()
+    }
+    
+    func isNotStringNull(object:AnyObject) -> Bool {
+        if let object = object as? String where object.uppercaseString == "NULL" {
+            return false
+        }
+        return true
     }
 }

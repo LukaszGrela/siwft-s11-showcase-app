@@ -49,11 +49,34 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate{
             //
             print("ChildChanged, snapshot:\(snapshot)")
             //
+            //
+            let location = self.tableData.indexOf({ (p:Post) -> Bool in
+                //
+                return p.postKey == snapshot.key
+                //
+            })
+            //
+            if let index = location, let postDict = snapshot.value as? Dictionary<String, AnyObject> {
+                let post = self.tableData[index]
+                
+                post.update(postDict)
+                
+                let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            }
         }
         postsEventAddedHandler = DataService.instance.postsHandle.observeEventType(FIRDataEventType.ChildAdded) { (snapshot:FIRDataSnapshot) in
             //
             print("ChildAdded, snapshot:\(snapshot)")
             //
+            
+            
+            if let postDict = snapshot.value as? Dictionary<String, AnyObject> {
+                self.tableData.append(Post(key: snapshot.key, data: postDict))
+                
+                self.tableView.insertRowsAtIndexPaths([NSIndexPath.init(forRow: self.tableData.count - 1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+            }
+
         }
         postsEventMovedHandler = DataService.instance.postsHandle.observeEventType(FIRDataEventType.ChildMoved) { (snapshot:FIRDataSnapshot) in
             //
@@ -64,10 +87,22 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate{
             //
             print("ChildRemoved, snapshot:\(snapshot)")
             //
+            let location = self.tableData.indexOf({ (p:Post) -> Bool in
+                //
+                return p.postKey == snapshot.key
+                //
+            })
+            if let index = location {
+                self.tableData.removeAtIndex(index)
+                self.tableView.deleteRowsAtIndexPaths([NSIndexPath.init(forRow: index, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+            } else {
+                //not found
+            }
+
         }
  
-        //observeSingleEventOfType
-        postsEventValueChangedHandler = DataService.instance.postsHandle.observeEventType(FIRDataEventType.Value) { (snapshot:FIRDataSnapshot) in
+        /*
+        DataService.instance.postsHandle.observeSingleEventOfType(FIRDataEventType.Value) { (snapshot:FIRDataSnapshot) in
             //TODO: not efficient, only for demo purposes, change it
             print("FIRDataEventType.Value")
             //clear first
@@ -85,6 +120,7 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate{
             
             self.tableView.reloadData()
         }
+         */
     }
     deinit{
         DataService.instance.postsHandle.removeObserverWithHandle(postsEventChangedHandler)
