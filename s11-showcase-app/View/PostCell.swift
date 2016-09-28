@@ -11,7 +11,7 @@ import Alamofire
 import FirebaseDatabase
 
 class PostCell: UITableViewCell {
-
+    
     static let ID:String = "PostCell"
     
     @IBOutlet weak var profileImage:UIImageView!
@@ -20,11 +20,13 @@ class PostCell: UITableViewCell {
     @IBOutlet weak var userNameLabel:UILabel!
     @IBOutlet weak var likesLabel:UILabel!
     @IBOutlet weak var descriptionText:UITextView!
+    @IBOutlet weak var postedOnLabel:UILabel!
     
     weak var post: Post!
     var request: Request?
+    var profileRequest:Request?
     
-    private var _postRef:FIRDatabaseReference?
+    private var _currentUserLikesRef:FIRDatabaseReference?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,7 +37,7 @@ class PostCell: UITableViewCell {
         likeItImage.userInteractionEnabled = true
         likeItImage.gestureRecognizers = [tap]
     }
-
+    
     override func drawRect(rect: CGRect) {
         self.profileImage.layer.cornerRadius = self.profileImage.frame.size.width / 2
         self.profileImage.clipsToBounds = true
@@ -66,22 +68,30 @@ class PostCell: UITableViewCell {
     func configure(data:Post, image:UIImage?) {
         //print("configure(data:\(data.imageUrl), image:\(image))")
         
-        _postRef = nil;
+        _currentUserLikesRef = nil;
         post = data;
+        
+        self.postedOnLabel.text = ""
+        if let timestamp = post.getLocalisedTimestamp(nil) {
+            self.postedOnLabel.text = "Posted on: \(timestamp)"
+            self.postedOnLabel.hidden = false
+        } else {
+            self.postedOnLabel.hidden = true
+        }
         
         updateLikeIt(self.post.userLikedIt)
         
-        //listen to changes
         if let user = DataService.instance.currentUserData {
-            _postRef = user.child(DataService.DB_LIKES)
+            _currentUserLikesRef = user.child(DataService.DB_LIKES)
         }
-        
-        if let postRef = _postRef {
+        //current user like
+        if let ref = _currentUserLikesRef {
             if let _ = self.post.userLikedIt {
                 //user already stored the value - we are handling it locally now
             } else {
+                //listen to changes
                 //get update from database once
-                postRef.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
+                ref.observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
                     print("value: \(snapshot.value)")
                     if let likes = snapshot.value as? Dictionary<String, Bool>, _ = likes[self.post.postKey] {
                         print("likes: \(likes)")
@@ -93,9 +103,51 @@ class PostCell: UITableViewCell {
                 })
             }
         }
+        //post user name
+        self.userNameLabel.text = ""
+        if let name = self.post.authorName {
+            //we have already retrieved user name
+            self.userNameLabel.text = name
+        } else {
+            //pull it
+            DataService.instance.usersHandle.child(self.post.author).observeSingleEventOfType(.Value, withBlock: { (snapshot:FIRDataSnapshot) in
+                print("value: \(snapshot.value)")
+                if let user = snapshot.value as? Dictionary<String, AnyObject> {
+                    if let name = user["username"] as? String {
+                        print("user: \(name)")
+                        self.userNameLabel.text = name
+                        self.post.authorName = name
+                    }
+                    if let profile = user["photo"] as? String {
+                        print("profile photo: \(profile)")
+                        self.post.authorPicUrl = profile
+                    }
+                }
+            })
+        }
         //
         likesLabel.text = "\(data.likes)"
         descriptionText.text = data.postDescription
+        
+        self.profileImage.image = UIImage(named:"default-user")
+        if let profileUrl = post.authorPicUrl {
+            if let profile = FeedVC.imageCache.objectForKey(profileUrl) as? UIImage {
+                self.profileImage.image = profile
+            } else {
+                profileRequest = Alamofire.request(.GET, profileUrl).validate(contentType: ["image/*"]).response(completionHandler: { (request:NSURLRequest?, response:NSHTTPURLResponse?, data:NSData?, error:NSError?) in
+                    //
+                    if error == nil {
+                        let img = UIImage(data: data!)!
+                        self.profileImage.image = img
+                        //cache?
+                        FeedVC.imageCache.setObject(img, forKey: profileUrl)
+                    } else {
+                        print(error.debugDescription)
+                        self.profileImage.image = UIImage(named:"default-user")
+                    }
+                })
+            }
+        }
         
         self.showcaseImage.hidden = false
         if let url = post.imageUrl where !url.isEmpty {
@@ -119,5 +171,5 @@ class PostCell: UITableViewCell {
             self.showcaseImage.hidden = true
         }
     }
-
+    
 }

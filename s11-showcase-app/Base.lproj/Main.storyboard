@@ -18,6 +18,7 @@
             <string>NotoSans</string>
             <string>NotoSans</string>
             <string>NotoSans</string>
+            <string>NotoSans</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -271,22 +272,22 @@
                                     <constraint firstAttribute="bottom" secondItem="RWw-ni-RA2" secondAttribute="bottom" constant="5" id="uNh-gP-gAG"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="360" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NwN-TB-jEO">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="380" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NwN-TB-jEO">
                                 <rect key="frame" x="0.0" y="131" width="600" height="469"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="PostCell" id="SsJ-LI-SAY" customClass="PostCell" customModule="s11_showcase_app" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="360"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="PostCell" rowHeight="380" id="SsJ-LI-SAY" customClass="PostCell" customModule="s11_showcase_app" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="380"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SsJ-LI-SAY" id="EC1-Nd-yVz">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="360"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="380"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tjy-73-FUi" customClass="MaterialView" customModule="s11_showcase_app" customModuleProvider="target">
-                                                    <rect key="frame" x="13" y="8" width="574" height="344"/>
+                                                    <rect key="frame" x="13" y="8" width="574" height="364"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="awe-tm-IOn">
-                                                            <rect key="frame" x="8" y="8" width="558" height="328"/>
+                                                            <rect key="frame" x="8" y="8" width="558" height="348"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="RER-te-7vE">
                                                                     <rect key="frame" x="0.0" y="0.0" width="558" height="50"/>
@@ -346,8 +347,17 @@
                                                                     <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                                                 </textView>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="screen" translatesAutoresizingMaskIntoConstraints="NO" id="WZr-zz-YSU">
-                                                                    <rect key="frame" x="0.0" y="130" width="558" height="198"/>
+                                                                    <rect key="frame" x="0.0" y="130" width="558" height="196"/>
                                                                 </imageView>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Posted on: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ca-VP-416">
+                                                                    <rect key="frame" x="0.0" y="331" width="558" height="17"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="17" id="jYx-Xd-1xv"/>
+                                                                    </constraints>
+                                                                    <fontDescription key="fontDescription" name="NotoSans" family="Noto Sans" pointSize="12"/>
+                                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
                                                             </subviews>
                                                         </stackView>
                                                     </subviews>
@@ -372,6 +382,7 @@
                                             <outlet property="descriptionText" destination="6R2-2y-8m1" id="8g7-8e-YOI"/>
                                             <outlet property="likeItImage" destination="3UI-P0-bL6" id="sRh-iV-U6a"/>
                                             <outlet property="likesLabel" destination="t8V-Pb-3db" id="bY5-il-jrJ"/>
+                                            <outlet property="postedOnLabel" destination="6Ca-VP-416" id="5ej-vD-0Rs"/>
                                             <outlet property="profileImage" destination="cSe-NJ-Iiy" id="RYI-8u-Q3M"/>
                                             <outlet property="showcaseImage" destination="WZr-zz-YSU" id="gTQ-qm-pCg"/>
                                             <outlet property="userNameLabel" destination="e09-5a-XsZ" id="G6N-DW-Vds"/>

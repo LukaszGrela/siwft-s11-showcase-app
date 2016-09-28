@@ -43,7 +43,7 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate{
         // Do any additional setup after loading the view.
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.estimatedRowHeight = 360
+        self.tableView.estimatedRowHeight = 380
         
         postsEventChangedHandler = DataService.instance.postsHandle.observeEventType(FIRDataEventType.ChildChanged) { (snapshot:FIRDataSnapshot) in
             //
@@ -62,7 +62,7 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate{
                 post.update(postDict)
                 
                 let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
             }
         }
         postsEventAddedHandler = DataService.instance.postsHandle.observeEventType(FIRDataEventType.ChildAdded) { (snapshot:FIRDataSnapshot) in
@@ -253,6 +253,7 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate{
         if let _cell = tableView.dequeueReusableCellWithIdentifier(PostCell.ID) as? PostCell {
             cell = _cell
             cell.request?.cancel()
+            cell.profileRequest?.cancel()
         } else {
             cell = PostCell()
         }

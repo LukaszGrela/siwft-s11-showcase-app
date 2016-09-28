@@ -43,12 +43,17 @@ class DataService {
     func createPost(post:Dictionary<String, AnyObject>) {
         print("createPost(post:\(post))")
         let postHandle = postsHandle.childByAutoId()
-            postHandle.setValue(post)
+        var _post = post
+        //timestamp
+        _post["timestamp"] = NSDate().timeIntervalSince1970
         
         //handle post binding
         if let user = currentUserData {
+            _post["author"] = user.key
             user.child(DataService.DB_POSTS).child(postHandle.key).setValue(true)
         }
+        //
+        postHandle.setValue(_post)
     }
     
     func togglePostLike(postId:String) {
@@ -112,10 +117,11 @@ class DataService {
     func createUser(uid:String, user:Dictionary<String, String>) {
         print("createUser \(uid), \(user)")
         
-        usersHandle.child(uid).setValue(user)
+        usersHandle.child(uid).updateChildValues(user)
     }
     
     
+    //MARK: Utils
     
     func isNotNull(object:AnyObject?) -> Bool {
         guard let object = object else {

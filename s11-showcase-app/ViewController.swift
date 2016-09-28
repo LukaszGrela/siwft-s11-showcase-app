@@ -80,7 +80,7 @@ class ViewController: UIViewController {
                         
                     } else {
                         print("Logged In! \(authData)")
-                        let user:Dictionary<String,String> = ["provider": (authData?.providerID)!, "test":"blah"]
+                        let user:Dictionary<String,String> = ["provider": (authData?.providerID)!, "username":(authData?.displayName)!, "photo":(authData?.photoURL?.absoluteString)!]
                         
                         //store in DB
                         DataService.instance.createUser((authData?.uid)!, user: user)
@@ -110,6 +110,7 @@ class ViewController: UIViewController {
 
     }
     @IBAction func attemptLogin(sender:UIButton!) {
+        print("ViewController.attemptLogin()")
         if let email = emailLabel.text where !email.isEmpty, let pwd = passLabel.text where !pwd.isEmpty {
             
             FIRAuth.auth()?.signInWithEmail(email, password: pwd, completion: { (user:FIRUser?, error:NSError?) in
@@ -150,6 +151,7 @@ class ViewController: UIViewController {
         }
     }
     func createUser(email:String, password:String) {
+        print("ViewController.createUser(email, password)")
         FIRAuth.auth()?.createUserWithEmail(email, password: password, completion: { (authData:FIRUser?, error:NSError?) in
             //
             if error != nil {
@@ -157,7 +159,7 @@ class ViewController: UIViewController {
                 self.showErrorAlert("User Creation", msg: "Could not create an account for the user \(email)")
             } else {
                 
-                let user:Dictionary<String,String> = ["provider": (authData?.providerID)!]
+                let user:Dictionary<String,String> = ["provider": (authData?.providerID)!, "username":(authData?.displayName)!, "photo":(authData?.photoURL?.absoluteString)!]
                 
                 //store in DB
                 DataService.instance.createUser((authData?.uid)!, user: user)
