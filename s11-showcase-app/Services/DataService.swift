@@ -42,12 +42,12 @@ class DataService {
     
     func createPost(post:Dictionary<String, AnyObject>) {
         print("createPost(post:\(post))")
-        let post = postsHandle.childByAutoId()
-            post.setValue(post)
+        let postHandle = postsHandle.childByAutoId()
+            postHandle.setValue(post)
         
         //handle post binding
         if let user = currentUserData {
-            user.child(DataService.DB_POSTS).child(post.key).setValue(true)
+            user.child(DataService.DB_POSTS).child(postHandle.key).setValue(true)
         }
     }
     
