@@ -55,12 +55,12 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb1733379046911184</string>
+				<string>!REMOVED!</string>
 			</array>
 		</dict>
 	</array>
 	<key>FacebookAppID</key>
-	<string>1733379046911184</string>
+	<string>!REMOVED!</string>
 	<key>FacebookDisplayName</key>
 	<string>s11-showcase-app</string>
 	<key>LSApplicationQueriesSchemes</key>
